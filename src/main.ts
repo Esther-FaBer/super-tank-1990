@@ -1,6 +1,18 @@
+import { GameLoop } from './core/GameLoop';
+
+
 const CANVAS_WIDTH = 416;
 const CANVAS_HEIGHT = 416;
 
+const state = {
+  square: {
+    x: 0,
+    y: 192,
+    width: 32,
+    height: 32,
+    speed: 120,
+  }
+};
 
 // Canvas setup
 function createCanvas(): HTMLCanvasElement {
@@ -16,6 +28,19 @@ function createCanvas(): HTMLCanvasElement {
 
   return canvas;
 }
+
+// Update — game logic
+function update(dt: number): void {
+  const sq = state.square;
+
+  sq.x += sq.speed * dt;
+
+  if (sq.x > CANVAS_WIDTH) {
+    sq.x = -sq.width;
+  }
+}
+
+
 
 // Render
 function render(ctx: CanvasRenderingContext2D): void {
@@ -38,12 +63,14 @@ function render(ctx: CanvasRenderingContext2D): void {
 // Init = page load
 function init(): void {
   const canvas = createCanvas();
-
   const ctx = canvas.getContext('2d')!;
-  render(ctx);
 
-  console.log('Super Tank 1990 initialized.');
-  console.log('Canvas: ${CANVAS_WIDTHx${CANVAS_HEIGHT}');
+  const gameLoop = new GameLoop(
+    (dt) => update(dt),
+    () => render(ctx)
+  );
+
+  gameLoop.start();
 }
 
 
