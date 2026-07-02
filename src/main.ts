@@ -2,7 +2,7 @@ const CANVAS_WIDTH = 416;
 const CANVAS_HEIGHT = 416;
 
 
-//canvas setup
+// Canvas setup
 function createCanvas(): HTMLCanvasElement {
   const canvas = document.createElement('canvas');
   canvas.width = CANVAS_WIDTH;
@@ -17,7 +17,7 @@ function createCanvas(): HTMLCanvasElement {
   return canvas;
 }
 
-//Render
+// Render
 function render(ctx: CanvasRenderingContext2D): void {
   //background in black
   ctx.fillStyle = '#000000';
@@ -35,7 +35,7 @@ function render(ctx: CanvasRenderingContext2D): void {
 
 }
 
-//Init = page load
+// Init = page load
 function init(): void {
   const canvas = createCanvas();
 
