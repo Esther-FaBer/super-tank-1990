@@ -1,11 +1,13 @@
 import { GameLoop } from './core/GameLoop';
 import { Grid } from './core/Grid';
+import { InputManager } from './core/InputManager';
 import { RenderSystem } from './systems/RenderSystem';
+import { Tank, Direction } from './entities/Tank';
 
 
 import level1 from './levels/level1.json';
 
-
+// Constants
 const TILE_SIZE = 32;
 const CANVAS_WIDTH  = 13 * TILE_SIZE; // 416
 const CANVAS_HEIGHT = 13 * TILE_SIZE; // 416
@@ -31,17 +33,34 @@ function init(): void {
 
   const grid = new Grid(level1.tiles, TILE_SIZE);
 
+  const player   = new Tank(6 * TILE_SIZE, 10 * TILE_SIZE, grid, Direction.Up);
+
+  const input    = new InputManager();
+
   const renderer = new RenderSystem(ctx, grid);
 
 // Update
-  function update(_dt: number): void {
+  function update(dt: number): void {
 
+    player.update(dt);
+
+
+    if (input.up)         player.move(Direction.Up,    dt);
+    else if (input.down)  player.move(Direction.Down,  dt);
+    else if (input.left)  player.move(Direction.Left,  dt);
+    else if (input.right) player.move(Direction.Right, dt);
+
+
+    if (input.fire && player.canShoot()) {
+      player.shoot();
+    }
   }
 
 //Render
   function render(): void {
     renderer.clear();       //  background
     renderer.drawMap();     // all tiles
+    renderer.drawTank(player); // player tank (drawn ON TOP of tiles)
     renderer.drawDebugGrid(); // grid lines
   }
 
