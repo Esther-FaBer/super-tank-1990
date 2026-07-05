@@ -3,7 +3,7 @@ import { Grid } from './core/Grid';
 import { InputManager } from './core/InputManager';
 import { RenderSystem } from './systems/RenderSystem';
 import { Tank, Direction } from './entities/Tank';
-
+import { CollisionSystem } from './systems/CollisionSystem';
 
 import level1 from './levels/level1.json';
 
