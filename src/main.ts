@@ -31,13 +31,13 @@ function init(): void {
   const canvas = createCanvas();
   const ctx    = canvas.getContext('2d')!;
 
-  const grid = new Grid(level1.tiles, TILE_SIZE);
 
-  const player   = new Tank(6 * TILE_SIZE, 10 * TILE_SIZE, grid, Direction.Up);
+  const grid      = new Grid(level1.tiles, TILE_SIZE);
+  const input     = new InputManager();
+  const renderer  = new RenderSystem(ctx, grid);
+  const collision = new CollisionSystem(grid);
 
-  const input    = new InputManager();
-
-  const renderer = new RenderSystem(ctx, grid);
+  const player    = new Tank(6 * TILE_SIZE, 10 * TILE_SIZE, Direction.Up);
 
 // Update
   function update(dt: number): void {
@@ -50,6 +50,7 @@ function init(): void {
     else if (input.left)  player.move(Direction.Left,  dt);
     else if (input.right) player.move(Direction.Right, dt);
 
+    collision.resolveEntityVsTiles(player);
 
     if (input.fire && player.canShoot()) {
       player.shoot();
