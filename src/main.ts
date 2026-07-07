@@ -4,6 +4,7 @@ import { InputManager } from './core/InputManager';
 import { RenderSystem } from './systems/RenderSystem';
 import { Tank, Direction } from './entities/Tank';
 import { CollisionSystem } from './systems/CollisionSystem';
+import { Bullet } from './entities/Bullet';
 
 import level1 from './levels/level1.json';
 
@@ -38,13 +39,14 @@ function init(): void {
   const collision = new CollisionSystem(grid);
 
   const player    = new Tank(6 * TILE_SIZE, 10 * TILE_SIZE, Direction.Up);
+  const bullets: Bullet[] = [];
 
 // Update
   function update(dt: number): void {
 
     player.update(dt);
 
-
+    // move tank
     if (input.up)         player.move(Direction.Up,    dt);
     else if (input.down)  player.move(Direction.Down,  dt);
     else if (input.left)  player.move(Direction.Left,  dt);

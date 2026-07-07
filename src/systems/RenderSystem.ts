@@ -1,5 +1,6 @@
 import { Grid, TileType, TILE_COLORS } from '../core/Grid';
 import { Tank, Direction, PLAYER_COLOR, BARREL_COLOR } from '../entities/Tank';
+import { Bullet } from '../entities/Bullet';
 
 export class RenderSystem {
   private ctx: CanvasRenderingContext2D;
@@ -68,18 +69,16 @@ export class RenderSystem {
   public drawTank(tank: Tank): void {
     const { x, y, width, height, direction } = tank;
 
-    // 1. Draw the tank body
+
     this.ctx.fillStyle = PLAYER_COLOR;
     this.ctx.fillRect(x + 4, y + 4, width - 8, height - 8);
 
-    // 2. Draw the barrel — a small rectangle pointing in the facing direction.
-    // The barrel starts at the center of the tank and extends outward.
     this.ctx.fillStyle = BARREL_COLOR;
 
-    const cx = x + width / 2;   // center x
-    const cy = y + height / 2;  // center y
-    const bw = 6;               // barrel width
-    const bh = 14;              // barrel length
+    const cx = x + width / 2; 
+    const cy = y + height / 2;
+    const bw = 6;
+    const bh = 14;
 
     this.ctx.save();
 
@@ -96,6 +95,24 @@ export class RenderSystem {
     this.ctx.fillRect(-bw / 2, -height / 2 + 2, bw, bh);
 
     this.ctx.restore();
+  }
+
+  public drawBullets(bullets: Bullet[]): void {
+    for (const bullet of bullets) {
+      if (!bullet.alive) continue;
+
+      this.ctx.fillStyle = 'rgba(255, 220, 50, 0.4)';
+      this.ctx.fillRect(
+        bullet.x - 2,
+        bullet.y - 2,
+        bullet.width  + 4,
+        bullet.height + 4
+      );
+
+
+      this.ctx.fillStyle = '#ffffff';
+      this.ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+    }
   }
 }
 

@@ -1,5 +1,6 @@
 import { Entity } from '../entities/Entity';
 import { Grid, TileType } from '../core/Grid';
+import { Bullet } from '../entities/Bullet';
 
 
 export function aabbOverlap(
@@ -147,5 +148,40 @@ export class CollisionSystem {
       entity.y + entity.height < 0 ||
       entity.y                  > mapHeight
     );
+  }
+
+  public processBullet(bullet: Bullet): boolean {
+
+    if (this.isOutOfBounds(bullet)) {
+      bullet.alive = false;
+      return true;
+    }
+
+
+    const hit = this.checkBulletVsTile(bullet.x, bullet.y, bullet.width, bullet.height);
+
+    if (hit === null) return false;
+
+    const { col, row, tile } = hit;
+
+
+    if (tile === TileType.Brick) {
+      this.grid.setTile(col, row, TileType.Empty);
+      bullet.alive = false;
+      return true;
+    }
+
+
+    if (tile === TileType.Steel) {
+      bullet.alive = false;
+      return true;
+    }
+
+    if (tile === TileType.Base) {
+      bullet.alive = false;
+      return true;
+    }
+
+    return false;
   }
 }
